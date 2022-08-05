@@ -69,4 +69,6 @@ expr <- expr[sort(rownames(expr)),]
 case = read.csv( file.path(output_dir, "cased_sequenced.csv"), stringsAsFactors=FALSE , sep=";" )
 expr = expr[ , case[ case$expr %in% 1 , ]$patient ]
 
+expr <- log2(expr + 0.001)
+
 write.table( expr , file=file.path(output_dir, "EXPR.csv") , quote=FALSE , sep=";" , col.names=TRUE , row.names=TRUE )

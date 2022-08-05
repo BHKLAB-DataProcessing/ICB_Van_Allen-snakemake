@@ -12,7 +12,7 @@ data_source  = "https://raw.githubusercontent.com/BHKLAB-Pachyderm/ICB_Van_Allen
 rule get_MultiAssayExp:
     input:
         S3.remote(prefix + "processed/CLIN.csv"),
-        S3.remote(prefix + "processed/CNA_gene.csv"),
+        # S3.remote(prefix + "processed/CNA_gene.csv"),
         S3.remote(prefix + "processed/EXPR.csv"),
         S3.remote(prefix + "processed/SNV.csv"),
         S3.remote(prefix + "processed/cased_sequenced.csv"),
@@ -87,20 +87,20 @@ rule format_expr:
 #         {prefix}processed \
 #         """
 
-rule format_cna_gene:
-    input:
-        S3.remote(prefix + "processed/cased_sequenced.csv"),
-        S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz")
-    output:
-        S3.remote(prefix + "processed/CNA_gene.csv")
-    resources:
-        mem_mb=2000
-    shell:
-        """
-        Rscript scripts/Format_CNA_gene.R \
-        {prefix}download \
-        {prefix}processed \
-        """
+# rule format_cna_gene:
+#     input:
+#         S3.remote(prefix + "processed/cased_sequenced.csv"),
+#         S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz")
+#     output:
+#         S3.remote(prefix + "processed/CNA_gene.csv")
+#     resources:
+#         mem_mb=2000
+#     shell:
+#         """
+#         Rscript scripts/Format_CNA_gene.R \
+#         {prefix}download \
+#         {prefix}processed \
+#         """
 
 rule format_clin:
     input:
@@ -122,7 +122,7 @@ rule format_cased_sequenced:
         S3.remote(prefix + "download/CLIN.txt"),
         S3.remote(prefix + "download/EXPR.txt.gz"),
         S3.remote(prefix + "download/SNV.txt.gz"),
-        S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz")
+        # S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz")
     output:
         S3.remote(prefix + "processed/cased_sequenced.csv")
     resources:
@@ -153,13 +153,13 @@ rule download_data:
         S3.remote(prefix + "download/tables1.mutation_list_all_patients.xlsx"),
         S3.remote(prefix + "download/tables2.clinical_and_genome_characteristics_each_patient.xlsx"),
         S3.remote(prefix + "download/TPM_RSEM_VAScience2015.txt"),
-        S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz"),
+        # S3.remote(prefix + "download/gistic/all_thresholded.by_genes.txt.gz"),
     resources:
         mem_mb=2000
     shell:
         """
         wget {data_source}tables1.mutation_list_all_patients.xlsx -O {prefix}download/tables1.mutation_list_all_patients.xlsx
         wget {data_source}tables2.clinical_and_genome_characteristics_each_patient.xlsx -O {prefix}download/tables2.clinical_and_genome_characteristics_each_patient.xlsx
-        wget {data_source}gistic/all_thresholded.by_genes.txt.gz -O {prefix}download/gistic/all_thresholded.by_genes.txt.gz
+        # wget {data_source}gistic/all_thresholded.by_genes.txt.gz -O {prefix}download/gistic/all_thresholded.by_genes.txt.gz
         wget -O {prefix}download/TPM_RSEM_VAScience2015.txt https://github.com/vanallenlab/VanAllen_CTLA4_Science_RNASeq_TPM/raw/master/TPM_RSEM_VAScience2015.txt 
         """ 
